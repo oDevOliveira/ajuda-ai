@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ usuario.nome }} - Ajuda.ai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <a href="{{ url_for('principal.portal') }}" class="logo">
+                Ajuda<span>.ai</span>
+            </a>
+
+            <ul>
+                <li>
+                    <a href="{{ url_for('principal.portal') }}">Início</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('conta.perfil') }}">Meu perfil</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('conta.publicar') }}">Criar campanha</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('autenticacao.logout') }}">Sair</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <section class="perfil">
+
+            <div class="perfil-topo">
+
+                {% if usuario.foto_perfil %}
+
+                    <img
+                        src="{{ url_for('static', filename='img/usuarios/' + usuario.foto_perfil) }}"
+                        alt="Foto de {{ usuario.nome }}"
+                    >
+
+                {% else %}
+
+                    <div class="perfil-foto-placeholder">
+                        {{ usuario.nome[0] | upper }}
+                    </div>
+
+                {% endif %}
+
+
+                <div class="perfil-info">
+
+                    <h2>{{ usuario.nome }}</h2>
+
+                    {% if usuario.bio %}
+                        <p>{{ usuario.bio }}</p>
+                    {% else %}
+                        <p>Este usuário ainda não adicionou uma bio.</p>
+                    {% endif %}
+
+                    <a
+                        href="{{ url_for('conta.editar_perfil') }}"
+                        class="btn btn-secundario"
+                    >
+                        Editar perfil
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="perfil-cabecalho">
+
+                <div>
+                    <h2>Minhas campanhas</h2>
+
+                    <p>
+                        Campanhas que você publicou no Ajuda.ai.
+                    </p>
+                </div>
+
+                <a
+                    href="{{ url_for('conta.publicar') }}"
+                    class="btn"
+                >
+                    Nova campanha
+                </a>
+
+            </div>
+
+
+            {% if publicacoes %}
+
+                <div class="perfil-publicacoes">
+
+                    {% for publicacao in publicacoes %}
+
+                        <article class="card">
+
+                            {% if publicacao.imagem %}
+
+                                <img
+                                    src="{{ url_for('static', filename='img/publicacao/' + publicacao.imagem) }}"
+                                    alt="{{ publicacao.titulo }}"
+                                >
+
+                            {% endif %}
+
+                            <div class="card-conteudo">
+
+                                <h3>
+                                    {{ publicacao.titulo }}
+                                </h3>
+
+                                <p>
+                                    {{ publicacao.descricao }}
+                                </p>
+
+                                <a
+                                    href="{{ url_for('principal.publicacao', id=publicacao.id) }}"
+                                    class="btn"
+                                >
+                                    Ver campanha
+                                </a>
+
+                                <a
+                                    href="{{ url_for('conta.editar_publicacao', id=publicacao.id) }}"
+                                    class="btn btn-secundario"
+                                >
+                                    Editar
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="perfil-vazio">
+
+                    <h3>Você ainda não criou nenhuma campanha</h3>
+
+                    <p>
+                        Crie sua primeira campanha e ela aparecerá aqui.
+                    </p>
+
+                    <a
+                        href="{{ url_for('conta.publicar') }}"
+                        class="btn"
+                    >
+                        Criar campanha
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <h3>Ajuda.ai</h3>
+
+        <p>
+            Uma plataforma para conectar pessoas
+            e campanhas.
+        </p>
+
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

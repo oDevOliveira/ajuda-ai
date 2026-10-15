@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Painel do Moderador - Ajuda.ai</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+            <a href="{{ url_for('principal.portal') }}">
+                Ajuda.ai
+            </a>
+        </div>
+
+        <nav>
+            <ul>
+
+                <li>
+                    <a href="{{ url_for('principal.portal') }}">
+                        Início
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('conta.perfil') }}">
+                        Meu perfil
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('conta.publicar') }}">
+                        Criar campanha
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('moderador.dashboard_moderador') }}">
+                        Moderador
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('autenticacao.logout') }}">
+                        Sair
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section class="moderador">
+
+            <div class="moderador-cabecalho">
+
+                <h1>Painel do moderador</h1>
+
+                <p>
+                    Gerencie as campanhas publicadas na plataforma.
+                </p>
+
+            </div>
+
+
+            {% if erro %}
+
+                <div class="erro">
+                    {{ erro }}
+                </div>
+
+            {% endif %}
+
+
+            <form method="POST" class="pesquisa-moderador">
+
+                <input
+                    type="text"
+                    name="pesquisa"
+                    placeholder="Pesquisar campanha ou usuário"
+                    value="{{ request.form.get('pesquisa', '') }}"
+                >
+
+                <button type="submit" class="btn">
+                    Pesquisar
+                </button>
+
+            </form>
+
+
+            <section class="moderador-publicacoes">
+
+                {% if publicacoes %}
+
+                    {% for publicacao in publicacoes %}
+
+                        <article class="moderador-card">
+
+                            {% if publicacao.imagem %}
+
+                                <img
+                                    src="{{ url_for('static', filename='img/publicacao/' ~ publicacao.imagem) }}"
+                                    alt="{{ publicacao.titulo }}"
+                                >
+
+                            {% endif %}
+
+
+                            <div class="moderador-card-conteudo">
+
+                                <h2>
+                                    {{ publicacao.titulo }}
+                                </h2>
+
+
+                                <p class="moderador-autor">
+
+                                    <strong>Publicado por:</strong>
+
+                                    {{ publicacao.usuario.nome }}
+
+                                </p>
+
+
+                                <p class="moderador-descricao">
+                                    {{ publicacao.descricao }}
+                                </p>
+
+
+                                <div class="moderador-acoes">
+
+                                    <a
+                                        href="{{ url_for('principal.publicacao', id=publicacao.id) }}"
+                                        class="btn"
+                                    >
+                                        Ver publicação
+                                    </a>
+
+
+                                    <a
+                                        href="{{ url_for('moderador.excluir_post', id=publicacao.id) }}"
+                                        class="btn btn-excluir"
+                                    >
+                                        Excluir publicação
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="moderador-vazio">
+
+                        {% if request.method == "POST" and request.form.get("pesquisa") %}
+
+                            <h2>Nenhuma publicação encontrada</h2>
+
+                            <p>
+                                Não encontramos campanhas ou usuários correspondentes à pesquisa.
+                            </p>
+
+                        {% else %}
+
+                            <h2>Nenhuma publicação cadastrada</h2>
+
+                            <p>
+                                Ainda não existem campanhas para moderar.
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            © 2026 Ajuda.ai - Todos os direitos reservados.
+        </p>
+
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+
+</html>

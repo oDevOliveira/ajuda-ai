@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar campanha - Ajuda.ai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <a href="{{ url_for('principal.portal') }}" class="logo">
+                Ajuda<span>.ai</span>
+            </a>
+
+            <ul>
+                <li>
+                    <a href="{{ url_for('principal.portal') }}">Início</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('conta.perfil') }}">Meu perfil</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('conta.publicar') }}">Criar campanha</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('autenticacao.logout') }}">Sair</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <section class="editar-container">
+
+            <div class="editar-header">
+
+                <a
+                    href="{{ url_for('conta.perfil') }}"
+                    class="voltar"
+                >
+                    ← Voltar ao perfil
+                </a>
+
+                <h1>Editar campanha</h1>
+
+                <p>
+                    Atualize as informações da sua campanha.
+                </p>
+
+            </div>
+
+
+            {% if erro %}
+
+                <div class="erro">
+                    {{ erro }}
+                </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <div class="campo">
+
+                    <label for="titulo">
+                        Título da campanha
+                    </label>
+
+                    <input
+                        type="text"
+                        id="titulo"
+                        name="titulo"
+                        value="{{ publicacao.titulo }}"
+                        placeholder="Título da campanha"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="descricao">
+                        Descrição
+                    </label>
+
+                    <textarea
+                        id="descricao"
+                        name="descricao"
+                        placeholder="Conte os detalhes da campanha..."
+                        required
+                    >{{ publicacao.descricao }}</textarea>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="pix">
+                        Chave PIX
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pix"
+                        name="pix"
+                        value="{{ publicacao.pix }}"
+                        placeholder="Sua chave PIX"
+                        required
+                    >
+
+                    <small>
+                        Essa chave ficará visível para quem acessar sua campanha.
+                    </small>
+
+                </div>
+
+
+                {% if publicacao.imagem %}
+
+                    <div class="campo">
+
+                        <label>Imagem atual</label>
+
+                        <div class="imagem-atual">
+
+                            <img
+                                src="{{ url_for('static', filename='img/publicacao/' + publicacao.imagem) }}"
+                                alt="{{ publicacao.titulo }}"
+                            >
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="campo">
+
+                    <label for="imagem">
+                        Nova imagem
+                    </label>
+
+                    <input
+                        type="file"
+                        id="imagem"
+                        name="imagem"
+                        accept="image/*"
+                    >
+
+                    <small>
+                        Deixe vazio para manter a imagem atual.
+                    </small>
+
+                </div>
+
+
+                <div class="form-acoes">
+
+                    <a
+                        href="{{ url_for('principal.publicacao', id=publicacao.id) }}"
+                        class="btn btn-secundario"
+                    >
+                        Cancelar
+                    </a>
+
+                    <button type="submit">
+                        Salvar alterações
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <h3>Ajuda.ai</h3>
+
+        <p>
+            Uma plataforma para conectar pessoas
+            e campanhas.
+        </p>
+
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

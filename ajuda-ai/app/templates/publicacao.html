@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ publicacao.titulo }} - Ajuda.ai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <a href="{{ url_for('principal.portal') }}" class="logo">
+                Ajuda<span>.ai</span>
+            </a>
+
+            <ul>
+                <li>
+                    <a href="{{ url_for('principal.portal') }}">Início</a>
+                </li>
+
+                {% if current_user.is_authenticated %}
+                    <li>
+                        <a href="{{ url_for('conta.perfil') }}">Meu perfil</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('conta.publicar') }}">Criar campanha</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('autenticacao.logout') }}">Sair</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ url_for('autenticacao.login') }}">Entrar</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ url_for('autenticacao.cadastro') }}" class="btn">
+                            Criar conta
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+
+    <main>
+
+        {% if erro %}
+
+            <div class="erro">
+                {{ erro }}
+            </div>
+
+        {% else %}
+
+            <article class="publicacao">
+
+                <div class="publicacao-header">
+
+                    {% if publicacao.usuario.foto_perfil %}
+
+                        <img
+                            class="foto-perfil"
+                            src="{{ url_for('static', filename='img/usuarios/' + publicacao.usuario.foto_perfil) }}"
+                            alt="Foto de {{ publicacao.usuario.nome }}"
+                        >
+
+                    {% else %}
+
+                        <div class="foto-perfil">
+                            {{ publicacao.usuario.nome[0] | upper }}
+                        </div>
+
+                    {% endif %}
+
+                    <div>
+                        <h3>{{ publicacao.usuario.nome }}</h3>
+                        <p>Campanha publicada</p>
+                    </div>
+
+                </div>
+
+
+                <div class="publicacao-conteudo">
+
+                    <h1>{{ publicacao.titulo }}</h1>
+
+                    <p>
+                        {{ publicacao.descricao }}
+                    </p>
+
+
+                    {% if publicacao.imagem %}
+
+                        <img
+                            class="publicacao-imagem"
+                            src="{{ url_for('static', filename='img/publicacao/' + publicacao.imagem) }}"
+                            alt="{{ publicacao.titulo }}"
+                        >
+
+                    {% endif %}
+
+
+                    <div class="publicacao-ajuda">
+
+                        <h2>Ajude esta campanha</h2>
+
+                        <p>
+                            Se você deseja contribuir, utilize a chave PIX abaixo.
+                        </p>
+
+                        <div class="pix">
+                            <span>PIX</span>
+                            <strong>{{ publicacao.pix }}</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <section class="comentarios">
+
+                <h2>Comentários</h2>
+
+
+                {% if comentarios %}
+
+                    {% for comentario in comentarios %}
+
+                        <article class="comentario">
+
+                            <strong>
+                                {{ comentario.usuario.nome }}
+                            </strong>
+
+                            <p>
+                                {{ comentario.conteudo }}
+                            </p>
+
+                            <small>
+                                {{ comentario.data.strftime('%d/%m/%Y às %H:%M') }}
+                            </small>
+
+                        </article>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="comentario">
+                        <p>
+                            Ainda não há comentários.
+                        </p>
+                    </div>
+
+                {% endif %}
+
+
+                {% if current_user.is_authenticated %}
+
+                    <form method="POST">
+
+                        <h3>Deixe um comentário</h3>
+
+                        <textarea
+                            name="conteudo_comentario"
+                            placeholder="Escreva algo..."
+                            required
+                        ></textarea>
+
+                        <button type="submit">
+                            Comentar
+                        </button>
+
+                    </form>
+
+                {% endif %}
+
+            </section>
+
+        {% endif %}
+
+    </main>
+
+
+    <footer>
+
+        <h3>Ajuda.ai</h3>
+
+        <p>
+            Uma plataforma para conectar pessoas
+            e campanhas.
+        </p>
+
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

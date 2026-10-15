@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar perfil - Ajuda.ai</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            <a href="{{ url_for('principal.portal') }}" class="logo">
+                Ajuda<span>.ai</span>
+            </a>
+
+            <ul>
+                <li>
+                    <a href="{{ url_for('principal.portal') }}">Início</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('conta.perfil') }}">Meu perfil</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('conta.publicar') }}">Criar campanha</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('autenticacao.logout') }}">Sair</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <main>
+
+        <section class="editar-container">
+
+            <div class="editar-header">
+
+                <a
+                    href="{{ url_for('conta.perfil') }}"
+                    class="voltar"
+                >
+                    ← Voltar ao perfil
+                </a>
+
+                <h1>Editar perfil</h1>
+
+                <p>
+                    Atualize as informações que aparecem no seu perfil.
+                </p>
+
+            </div>
+
+
+            {% if erro %}
+
+                <div class="erro">
+                    {{ erro }}
+                </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <div class="campo">
+
+                    <label for="nome">
+                        Nome
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        value="{{ usuario.nome }}"
+                        placeholder="Seu nome"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="bio">
+                        Bio
+                    </label>
+
+                    <textarea
+                        id="bio"
+                        name="bio"
+                        placeholder="Conte um pouco sobre você..."
+                    >{{ usuario.bio or "" }}</textarea>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="foto">
+                        Foto de perfil
+                    </label>
+
+                    {% if usuario.foto_perfil %}
+
+                        <div class="foto-atual">
+
+                            <img
+                                src="{{ url_for('static', filename='img/usuarios/' + usuario.foto_perfil) }}"
+                                alt="Sua foto de perfil"
+                            >
+
+                            <div>
+                                <strong>Foto atual</strong>
+                                <p>Escolha outra imagem para substituí-la.</p>
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                    <input
+                        type="file"
+                        id="foto"
+                        name="foto"
+                        accept="image/*"
+                    >
+
+                </div>
+
+
+                <div class="form-acoes">
+
+                    <a
+                        href="{{ url_for('conta.perfil') }}"
+                        class="btn btn-secundario"
+                    >
+                        Cancelar
+                    </a>
+
+                    <button type="submit">
+                        Salvar alterações
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <h3>Ajuda.ai</h3>
+
+        <p>
+            Uma plataforma para conectar pessoas
+            e campanhas.
+        </p>
+
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>
